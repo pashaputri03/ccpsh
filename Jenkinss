@@ -12,5 +12,14 @@ pipeline {
                 git branch: 'main', url: 'https://github.com/pashaputri03/ccpsh.git'
             }
         }
+ stage('Build Docker Images') {
+            steps {
+                script {
+                    echo 'Building Docker image...'
+                    bat 'docker build -t my-jenkins-demo:latest .'
+                }
+            }
+        }
+
     }
 }
