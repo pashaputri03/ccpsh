@@ -20,6 +20,15 @@ pipeline {
                 }
             }
         }
+ stage('Run Docker Containers') {
+            steps {
+                script {
+                    echo 'Running Docker container...'
+                    bat 'docker run -d --name demo_container my-jenkins-demo:latest'
+                }
+            }
+        }
+
 
     }
 }
