@@ -29,6 +29,24 @@ pipeline {
             }
         }
 
+        stage('Verify Container Running') {
+            steps {
+                script {
+                    echo 'Checking container status...'
+                    bat 'docker ps | findstr demo_container'
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Cleaning up Docker containers...'
+            bat 'docker stop demo_container || exit 0'
+            bat 'docker rm demo_container || exit 0'
+        }
+    }
+
 
     }
 }
