@@ -1,10 +1,54 @@
+
 pipeline {
     agent any
+
     stages {
-        stage('Hello achaa') {
+        stage('Checkout SCM') {
             steps {
-                echo 'berhasil yaa'
+                checkout scm
+            }
+        }
+
+        stage('Checkout Code') {
+            steps {
+                echo 'Cloning public GitHub repository...'
+                git branch: 'main', url: 'https://github.com/pashaputri03/ccpsh.git/'
+            }
+        }
+
+        stage('Build Docker Images') {
+            steps {
+                script {
+                    echo 'Building Docker image...'
+                    bat 'docker build -t my-jenkins-demo:latest .'
+                }
+            }
+        }
+
+        stage('Run Docker Containers') {
+            steps {
+                script {
+                    echo 'Running Docker container...'
+                    bat 'docker run -d --name demo_container my-jenkins-demo:latest'
+                }
+            }
+        }
+
+        stage('Verify Container Running') {
+            steps {
+                script {
+                    echo 'Checking container status...'
+                    bat 'docker ps | findstr demo_container'
+                }
             }
         }
     }
+
+    post {
+        always {
+            echo 'Cleaning up Docker containers...'
+            bat 'docker stop demo_container || exit 0'
+            bat 'docker rm demo_container || exit 0'
+        }
+    }
 }
