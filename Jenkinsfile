@@ -49,6 +49,7 @@ pipeline {
             echo 'Cleaning up Docker containers...'
             bat 'docker stop demo_container || exit 0'
             bat 'docker rm demo_container || exit 0'
-        }
+        }
     }
 }
+
